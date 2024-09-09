@@ -12,7 +12,7 @@ const applicationSchema = new mongoose.Schema({
       required: true,
     },
 
-     enrollment: {
+   enrollment: {
       type: String,
       required: true,
     },

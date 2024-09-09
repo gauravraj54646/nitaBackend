@@ -24,7 +24,7 @@ export const register = catchAsyncErrors (async (req, res, next) => {
     if (!name || !email || !phone || !address || !password || !role || !enrollment || !branch) {
       return next(new ErrorHandler("All fileds are required.", 400));
     }
-    if (role === "Student" && (!firstSkills || !seconSkills || !thirdSkills )) {
+    if (role === "Student" && (!firstSkills || !secondSkills || !thirdSkills )) {
       return next(
         new ErrorHandler("Please provide your prefered Skills.", 400)
       );

@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   enrollment: {
-    type: Number,
+    type: String,
     required: true,
   },
   branch:{

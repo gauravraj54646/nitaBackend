@@ -10,7 +10,7 @@ const jobSchema = new mongoose.Schema({
     required: true,
     enum: ["Full-time-employement", "Intern+full-time-employement","Internship","hackthons"],
   },
-  scrollYear: {
+  Year: {
     type: String,
     required: true,
   },
@@ -43,7 +43,7 @@ const jobSchema = new mongoose.Schema({
   // },
   Opportunities: {
     type: String,
-    default: "No",
+    default: "Of-Campus",
     enum: ["On-Campus", "Of-Campus","Club"],
   },
   personalWebsite: {
