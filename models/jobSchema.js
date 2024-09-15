@@ -36,11 +36,13 @@ const jobSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+
   // hiringMultipleCandidates: {
   //   type: String,
   //   default: "No",
   //   enum: ["Yes", "No"],
   // },
+  
   Opportunities: {
     type: String,
     default: "Of-Campus",
@@ -71,7 +73,7 @@ const jobSchema = new mongoose.Schema({
   postedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-    required: true,
+    // required: true,
   },
 });
 

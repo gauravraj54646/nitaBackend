@@ -21,23 +21,24 @@ export const postJob = catchAsyncErrors(async (req, res, next) => {
     personalWebsiteUrl,
     // jobNiche,
     jobFields,
-    
   } = req.body;
-  if (
-    !title ||
-    !jobType ||
+  console.log(req.body)
+  // if (
+    // !title ||
+    // !jobType ||
     // !location ||
-    ! Year||
-    !companyName ||
-    !introduction ||
-    !responsibilities ||
-    !qualifications ||
-    !salary ||
+    // !Year ||
+    // !companyName ||
+    // !introduction ||
+    // !responsibilities ||
+    // !qualifications ||
+    // !salary ||
     // !jobNiche
-    !jobFields
-  ) {
-    return next(new ErrorHandler("Please provide full job details.", 400));
-  }
+    // !jobFields
+  // ) {
+  //   console.log(req.body)
+  //   return next(new ErrorHandler("Please provide full job details.", 400));
+  // }
   if (
     (personalWebsiteTitle && !personalWebsiteUrl) ||
     (!personalWebsiteTitle && personalWebsiteUrl)
@@ -49,7 +50,7 @@ export const postJob = catchAsyncErrors(async (req, res, next) => {
       )
     );
   }
-  const postedBy = req.user._id;  //who post job
+  const postedBy = req.user._id; //who post job
   const job = await Job.create({
     title,
     jobType,
@@ -65,12 +66,13 @@ export const postJob = catchAsyncErrors(async (req, res, next) => {
     Opportunities,
     personalWebsite: {
       title: personalWebsiteTitle,
-      url: personalWebsiteUrl
+      url: personalWebsiteUrl,
     },
     jobFields,
     postedBy,
   });
-  res.status(201).json({   //job created successfully
+  res.status(201).json({
+    //job created successfully
     success: true,
     message: "Job posted successfully!.",
     job,
@@ -95,7 +97,7 @@ export const getAllJobs = catchAsyncErrors(async (req, res, next) => {
       { introduction: { $regex: searchKeyword, $options: "i" } },
     ];
   }
-  const jobs = await Job.find(query);  // we find jobs by query
+  const jobs = await Job.find(query); // we find jobs by query
   res.status(200).json({
     success: true,
     jobs,
@@ -116,7 +118,7 @@ export const deleteJob = catchAsyncErrors(async (req, res, next) => {
   const job = await Job.findById(id);
   // console.log(job)
   if (!job) {
-    return next(new ErrorHandler("Oops! Job not found.", 404));  
+    return next(new ErrorHandler("Oops! Job not found.", 404));
   }
   await job.deleteOne();
   res.status(200).json({
@@ -131,7 +133,7 @@ export const getASingleJob = catchAsyncErrors(async (req, res, next) => {
   if (!job) {
     return next(new ErrorHandler("Job not found.", 404));
   }
-  // 
+  //
   res.status(200).json({
     success: true,
     job,

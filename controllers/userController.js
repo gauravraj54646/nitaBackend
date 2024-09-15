@@ -4,7 +4,7 @@ import { User } from "../models/userSchema.js";
 import { v2 as cloudinary } from "cloudinary";
 import { sendToken } from "../utils/jwtToken.js";
 
-export const register = catchAsyncErrors (async (req, res, next) => {
+export const register = catchAsyncErrors(async (req, res, next) => {
   try {
     const {
       name,
@@ -15,16 +15,25 @@ export const register = catchAsyncErrors (async (req, res, next) => {
       address,
       password,
       role,
-      firstSkills,    //firstNiche
+      firstSkills, //firstNiche
       secondSkills,
       thirdSkills,
       coverLetter,
     } = req.body;
 
-    if (!name || !email || !phone || !address || !password || !role || !enrollment || !branch) {
+    if (
+      !name ||
+      !email ||
+      !phone ||
+      !address ||
+      !password ||
+      !role ||
+      !enrollment ||
+      !branch
+    ) {
       return next(new ErrorHandler("All fileds are required.", 400));
     }
-    if (role === "Student" && (!firstSkills || !secondSkills || !thirdSkills )) {
+    if (role === "Student" && (!firstSkills || !secondSkills || !thirdSkills)) {
       return next(
         new ErrorHandler("Please provide your prefered Skills.", 400)
       );
@@ -80,11 +89,22 @@ export const register = catchAsyncErrors (async (req, res, next) => {
 
 export const login = catchAsyncErrors(async (req, res, next) => {
   const { role, email, password } = req.body;
-  if (!role || !email || !password) {
-    return next(
-      new ErrorHandler("Email, password and role are required.", 400)
-    );
+  if (!password) {
+    return next(new ErrorHandler(" password  are required.", 400));
   }
+  if (!email) {
+    return next(new ErrorHandler("Email, are required.", 400));
+  }
+  if (!role) {
+    return next(new ErrorHandler("role are required.", 400));
+  }
+
+  // if (!role || !email || !password) {
+  //   return next(
+  //     new ErrorHandler("Email, password and role are required.", 400)
+  //   );
+  // }
+  console.log(req.body);
   const user = await User.findOne({ email }).select("+password"); //for getting pasword
   if (!user) {
     return next(new ErrorHandler("Invalid email or password.", 400));
@@ -146,15 +166,16 @@ export const updateProfile = catchAsyncErrors(async (req, res, next) => {
       new ErrorHandler("Please provide your all preferred job niches.", 400)
     );
   }
-  if (req.files) {     // we now check if resume then update resume
-    const resume = req.files.resume;   //we add here ? 
+  if (req.files) {
+    // we now check if resume then update resume
+    const resume = req.files.resume; //we add here ?
     if (resume) {
       const currentResumeId = req.user.resume.public_id;
       if (currentResumeId) {
         await cloudinary.uploader.destroy(currentResumeId); //we delete resume
       }
       const newResume = await cloudinary.uploader.upload(resume.tempFilePath, {
-        folder: "Job_Seekers_Resume"
+        folder: "Job_Seekers_Resume",
       });
       newUserData.resume = {
         public_id: newResume.public_id,
@@ -175,7 +196,6 @@ export const updateProfile = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-
 export const updatePassword = catchAsyncErrors(async (req, res, next) => {
   const user = await User.findById(req.user.id).select("+password");
 
@@ -195,3 +215,4 @@ export const updatePassword = catchAsyncErrors(async (req, res, next) => {
   await user.save();
   sendToken(user, 200, res, "Password updated successfully!.");
 });
+
